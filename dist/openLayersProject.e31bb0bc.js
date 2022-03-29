@@ -112928,745 +112928,7 @@ var _View = _interopRequireDefault(require("./View.js"));
 var _util = require("./util.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./AssertionError.js":"node_modules/ol/AssertionError.js","./Collection.js":"node_modules/ol/Collection.js","./Disposable.js":"node_modules/ol/Disposable.js","./Feature.js":"node_modules/ol/Feature.js","./Geolocation.js":"node_modules/ol/Geolocation.js","./layer/Graticule.js":"node_modules/ol/layer/Graticule.js","./Image.js":"node_modules/ol/Image.js","./ImageBase.js":"node_modules/ol/ImageBase.js","./ImageCanvas.js":"node_modules/ol/ImageCanvas.js","./ImageTile.js":"node_modules/ol/ImageTile.js","./Kinetic.js":"node_modules/ol/Kinetic.js","./Map.js":"node_modules/ol/Map.js","./MapBrowserEvent.js":"node_modules/ol/MapBrowserEvent.js","./MapBrowserEventHandler.js":"node_modules/ol/MapBrowserEventHandler.js","./MapEvent.js":"node_modules/ol/MapEvent.js","./Object.js":"node_modules/ol/Object.js","./Observable.js":"node_modules/ol/Observable.js","./Overlay.js":"node_modules/ol/Overlay.js","./PluggableMap.js":"node_modules/ol/PluggableMap.js","./Tile.js":"node_modules/ol/Tile.js","./TileCache.js":"node_modules/ol/TileCache.js","./TileQueue.js":"node_modules/ol/TileQueue.js","./TileRange.js":"node_modules/ol/TileRange.js","./VectorRenderTile.js":"node_modules/ol/VectorRenderTile.js","./VectorTile.js":"node_modules/ol/VectorTile.js","./View.js":"node_modules/ol/View.js","./util.js":"node_modules/ol/util.js"}],"node_modules/ol/format/TextFeature.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _Feature = _interopRequireDefault(require("../format/Feature.js"));
-
-var _FormatType = _interopRequireDefault(require("../format/FormatType.js"));
-
-var _util = require("../util.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var __extends = void 0 && (void 0).__extends || function () {
-  var extendStatics = function (d, b) {
-    extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
-    };
-
-    return extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-    extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
-/**
- * @module ol/format/TextFeature
- */
-
-
-/**
- * @classdesc
- * Abstract base class; normally only used for creating subclasses and not
- * instantiated in apps.
- * Base class for text feature formats.
- *
- * @abstract
- */
-var TextFeature =
-/** @class */
-function (_super) {
-  __extends(TextFeature, _super);
-
-  function TextFeature() {
-    return _super.call(this) || this;
-  }
-  /**
-   * @return {import("./FormatType.js").default} Format.
-   */
-
-
-  TextFeature.prototype.getType = function () {
-    return _FormatType.default.TEXT;
-  };
-  /**
-   * Read the feature from the source.
-   *
-   * @param {Document|Element|Object|string} source Source.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @return {import("../Feature.js").default} Feature.
-   * @api
-   */
-
-
-  TextFeature.prototype.readFeature = function (source, opt_options) {
-    return this.readFeatureFromText(getText(source), this.adaptOptions(opt_options));
-  };
-  /**
-   * @abstract
-   * @param {string} text Text.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @protected
-   * @return {import("../Feature.js").default} Feature.
-   */
-
-
-  TextFeature.prototype.readFeatureFromText = function (text, opt_options) {
-    return (0, _util.abstract)();
-  };
-  /**
-   * Read the features from the source.
-   *
-   * @param {Document|Element|Object|string} source Source.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @return {Array<import("../Feature.js").default>} Features.
-   * @api
-   */
-
-
-  TextFeature.prototype.readFeatures = function (source, opt_options) {
-    return this.readFeaturesFromText(getText(source), this.adaptOptions(opt_options));
-  };
-  /**
-   * @abstract
-   * @param {string} text Text.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @protected
-   * @return {Array<import("../Feature.js").default>} Features.
-   */
-
-
-  TextFeature.prototype.readFeaturesFromText = function (text, opt_options) {
-    return (0, _util.abstract)();
-  };
-  /**
-   * Read the geometry from the source.
-   *
-   * @param {Document|Element|Object|string} source Source.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @return {import("../geom/Geometry.js").default} Geometry.
-   * @api
-   */
-
-
-  TextFeature.prototype.readGeometry = function (source, opt_options) {
-    return this.readGeometryFromText(getText(source), this.adaptOptions(opt_options));
-  };
-  /**
-   * @abstract
-   * @param {string} text Text.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @protected
-   * @return {import("../geom/Geometry.js").default} Geometry.
-   */
-
-
-  TextFeature.prototype.readGeometryFromText = function (text, opt_options) {
-    return (0, _util.abstract)();
-  };
-  /**
-   * Read the projection from the source.
-   *
-   * @param {Document|Element|Object|string} source Source.
-   * @return {import("../proj/Projection.js").default|undefined} Projection.
-   * @api
-   */
-
-
-  TextFeature.prototype.readProjection = function (source) {
-    return this.readProjectionFromText(getText(source));
-  };
-  /**
-   * @param {string} text Text.
-   * @protected
-   * @return {import("../proj/Projection.js").default|undefined} Projection.
-   */
-
-
-  TextFeature.prototype.readProjectionFromText = function (text) {
-    return this.dataProjection;
-  };
-  /**
-   * Encode a feature as a string.
-   *
-   * @param {import("../Feature.js").default} feature Feature.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @return {string} Encoded feature.
-   * @api
-   */
-
-
-  TextFeature.prototype.writeFeature = function (feature, opt_options) {
-    return this.writeFeatureText(feature, this.adaptOptions(opt_options));
-  };
-  /**
-   * @abstract
-   * @param {import("../Feature.js").default} feature Features.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @protected
-   * @return {string} Text.
-   */
-
-
-  TextFeature.prototype.writeFeatureText = function (feature, opt_options) {
-    return (0, _util.abstract)();
-  };
-  /**
-   * Encode an array of features as string.
-   *
-   * @param {Array<import("../Feature.js").default>} features Features.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @return {string} Encoded features.
-   * @api
-   */
-
-
-  TextFeature.prototype.writeFeatures = function (features, opt_options) {
-    return this.writeFeaturesText(features, this.adaptOptions(opt_options));
-  };
-  /**
-   * @abstract
-   * @param {Array<import("../Feature.js").default>} features Features.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @protected
-   * @return {string} Text.
-   */
-
-
-  TextFeature.prototype.writeFeaturesText = function (features, opt_options) {
-    return (0, _util.abstract)();
-  };
-  /**
-   * Write a single geometry.
-   *
-   * @param {import("../geom/Geometry.js").default} geometry Geometry.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @return {string} Geometry.
-   * @api
-   */
-
-
-  TextFeature.prototype.writeGeometry = function (geometry, opt_options) {
-    return this.writeGeometryText(geometry, this.adaptOptions(opt_options));
-  };
-  /**
-   * @abstract
-   * @param {import("../geom/Geometry.js").default} geometry Geometry.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @protected
-   * @return {string} Text.
-   */
-
-
-  TextFeature.prototype.writeGeometryText = function (geometry, opt_options) {
-    return (0, _util.abstract)();
-  };
-
-  return TextFeature;
-}(_Feature.default);
-/**
- * @param {Document|Element|Object|string} source Source.
- * @return {string} Text.
- */
-
-
-function getText(source) {
-  if (typeof source === 'string') {
-    return source;
-  } else {
-    return '';
-  }
-}
-
-var _default = TextFeature;
-exports.default = _default;
-},{"../format/Feature.js":"node_modules/ol/format/Feature.js","../format/FormatType.js":"node_modules/ol/format/FormatType.js","../util.js":"node_modules/ol/util.js"}],"node_modules/ol/geom/flat/flip.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.flipXY = flipXY;
-
-/**
- * @module ol/geom/flat/flip
- */
-
-/**
- * @param {Array<number>} flatCoordinates Flat coordinates.
- * @param {number} offset Offset.
- * @param {number} end End.
- * @param {number} stride Stride.
- * @param {Array<number>} [opt_dest] Destination.
- * @param {number} [opt_destOffset] Destination offset.
- * @return {Array<number>} Flat coordinates.
- */
-function flipXY(flatCoordinates, offset, end, stride, opt_dest, opt_destOffset) {
-  var dest, destOffset;
-
-  if (opt_dest !== undefined) {
-    dest = opt_dest;
-    destOffset = opt_destOffset !== undefined ? opt_destOffset : 0;
-  } else {
-    dest = [];
-    destOffset = 0;
-  }
-
-  var j = offset;
-
-  while (j < end) {
-    var x = flatCoordinates[j++];
-    dest[destOffset++] = flatCoordinates[j++];
-    dest[destOffset++] = x;
-
-    for (var k = 2; k < stride; ++k) {
-      dest[destOffset++] = flatCoordinates[j++];
-    }
-  }
-
-  dest.length = destOffset;
-  return dest;
-}
-},{}],"node_modules/ol/format/Polyline.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.decodeDeltas = decodeDeltas;
-exports.decodeFloats = decodeFloats;
-exports.decodeSignedIntegers = decodeSignedIntegers;
-exports.decodeUnsignedIntegers = decodeUnsignedIntegers;
-exports.default = void 0;
-exports.encodeDeltas = encodeDeltas;
-exports.encodeFloats = encodeFloats;
-exports.encodeSignedIntegers = encodeSignedIntegers;
-exports.encodeUnsignedInteger = encodeUnsignedInteger;
-exports.encodeUnsignedIntegers = encodeUnsignedIntegers;
-
-var _Feature = _interopRequireDefault(require("../Feature.js"));
-
-var _GeometryLayout = _interopRequireDefault(require("../geom/GeometryLayout.js"));
-
-var _LineString = _interopRequireDefault(require("../geom/LineString.js"));
-
-var _TextFeature = _interopRequireDefault(require("./TextFeature.js"));
-
-var _asserts = require("../asserts.js");
-
-var _flip = require("../geom/flat/flip.js");
-
-var _proj = require("../proj.js");
-
-var _SimpleGeometry = require("../geom/SimpleGeometry.js");
-
-var _inflate = require("../geom/flat/inflate.js");
-
-var _Feature2 = require("./Feature.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var __extends = void 0 && (void 0).__extends || function () {
-  var extendStatics = function (d, b) {
-    extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
-    };
-
-    return extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-    extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
-/**
- * @module ol/format/Polyline
- */
-
-
-/**
- * @typedef {Object} Options
- * @property {number} [factor=1e5] The factor by which the coordinates values will be scaled.
- * @property {GeometryLayout} [geometryLayout='XY'] Layout of the
- * feature geometries created by the format reader.
- */
-
-/**
- * @classdesc
- * Feature format for reading and writing data in the Encoded
- * Polyline Algorithm Format.
- *
- * When reading features, the coordinates are assumed to be in two dimensions
- * and in [latitude, longitude] order.
- *
- * As Polyline sources contain a single feature,
- * {@link module:ol/format/Polyline~Polyline#readFeatures} will return the
- * feature in an array.
- *
- * @api
- */
-var Polyline =
-/** @class */
-function (_super) {
-  __extends(Polyline, _super);
-  /**
-   * @param {Options} [opt_options] Optional configuration object.
-   */
-
-
-  function Polyline(opt_options) {
-    var _this = _super.call(this) || this;
-
-    var options = opt_options ? opt_options : {};
-    /**
-     * @type {import("../proj/Projection.js").default}
-     */
-
-    _this.dataProjection = (0, _proj.get)('EPSG:4326');
-    /**
-     * @private
-     * @type {number}
-     */
-
-    _this.factor_ = options.factor ? options.factor : 1e5;
-    /**
-     * @private
-     * @type {import("../geom/GeometryLayout").default}
-     */
-
-    _this.geometryLayout_ = options.geometryLayout ? options.geometryLayout : _GeometryLayout.default.XY;
-    return _this;
-  }
-  /**
-   * @protected
-   * @param {string} text Text.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @return {import("../Feature.js").default} Feature.
-   */
-
-
-  Polyline.prototype.readFeatureFromText = function (text, opt_options) {
-    var geometry = this.readGeometryFromText(text, opt_options);
-    return new _Feature.default(geometry);
-  };
-  /**
-   * @param {string} text Text.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @protected
-   * @return {Array<Feature>} Features.
-   */
-
-
-  Polyline.prototype.readFeaturesFromText = function (text, opt_options) {
-    var feature = this.readFeatureFromText(text, opt_options);
-    return [feature];
-  };
-  /**
-   * @param {string} text Text.
-   * @param {import("./Feature.js").ReadOptions} [opt_options] Read options.
-   * @protected
-   * @return {import("../geom/Geometry.js").default} Geometry.
-   */
-
-
-  Polyline.prototype.readGeometryFromText = function (text, opt_options) {
-    var stride = (0, _SimpleGeometry.getStrideForLayout)(this.geometryLayout_);
-    var flatCoordinates = decodeDeltas(text, stride, this.factor_);
-    (0, _flip.flipXY)(flatCoordinates, 0, flatCoordinates.length, stride, flatCoordinates);
-    var coordinates = (0, _inflate.inflateCoordinates)(flatCoordinates, 0, flatCoordinates.length, stride);
-    var lineString = new _LineString.default(coordinates, this.geometryLayout_);
-    return (0, _Feature2.transformGeometryWithOptions)(lineString, false, this.adaptOptions(opt_options));
-  };
-  /**
-   * @param {import("../Feature.js").default} feature Features.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @protected
-   * @return {string} Text.
-   */
-
-
-  Polyline.prototype.writeFeatureText = function (feature, opt_options) {
-    var geometry = feature.getGeometry();
-
-    if (geometry) {
-      return this.writeGeometryText(geometry, opt_options);
-    } else {
-      (0, _asserts.assert)(false, 40); // Expected `feature` to have a geometry
-
-      return '';
-    }
-  };
-  /**
-   * @param {Array<import("../Feature.js").default>} features Features.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @protected
-   * @return {string} Text.
-   */
-
-
-  Polyline.prototype.writeFeaturesText = function (features, opt_options) {
-    return this.writeFeatureText(features[0], opt_options);
-  };
-  /**
-   * @param {LineString} geometry Geometry.
-   * @param {import("./Feature.js").WriteOptions} [opt_options] Write options.
-   * @protected
-   * @return {string} Text.
-   */
-
-
-  Polyline.prototype.writeGeometryText = function (geometry, opt_options) {
-    geometry =
-    /** @type {LineString} */
-    (0, _Feature2.transformGeometryWithOptions)(geometry, true, this.adaptOptions(opt_options));
-    var flatCoordinates = geometry.getFlatCoordinates();
-    var stride = geometry.getStride();
-    (0, _flip.flipXY)(flatCoordinates, 0, flatCoordinates.length, stride, flatCoordinates);
-    return encodeDeltas(flatCoordinates, stride, this.factor_);
-  };
-
-  return Polyline;
-}(_TextFeature.default);
-/**
- * Encode a list of n-dimensional points and return an encoded string
- *
- * Attention: This function will modify the passed array!
- *
- * @param {Array<number>} numbers A list of n-dimensional points.
- * @param {number} stride The number of dimension of the points in the list.
- * @param {number} [opt_factor] The factor by which the numbers will be
- *     multiplied. The remaining decimal places will get rounded away.
- *     Default is `1e5`.
- * @return {string} The encoded string.
- * @api
- */
-
-
-function encodeDeltas(numbers, stride, opt_factor) {
-  var factor = opt_factor ? opt_factor : 1e5;
-  var d;
-  var lastNumbers = new Array(stride);
-
-  for (d = 0; d < stride; ++d) {
-    lastNumbers[d] = 0;
-  }
-
-  for (var i = 0, ii = numbers.length; i < ii;) {
-    for (d = 0; d < stride; ++d, ++i) {
-      var num = numbers[i];
-      var delta = num - lastNumbers[d];
-      lastNumbers[d] = num;
-      numbers[i] = delta;
-    }
-  }
-
-  return encodeFloats(numbers, factor);
-}
-/**
- * Decode a list of n-dimensional points from an encoded string
- *
- * @param {string} encoded An encoded string.
- * @param {number} stride The number of dimension of the points in the
- *     encoded string.
- * @param {number} [opt_factor] The factor by which the resulting numbers will
- *     be divided. Default is `1e5`.
- * @return {Array<number>} A list of n-dimensional points.
- * @api
- */
-
-
-function decodeDeltas(encoded, stride, opt_factor) {
-  var factor = opt_factor ? opt_factor : 1e5;
-  var d;
-  /** @type {Array<number>} */
-
-  var lastNumbers = new Array(stride);
-
-  for (d = 0; d < stride; ++d) {
-    lastNumbers[d] = 0;
-  }
-
-  var numbers = decodeFloats(encoded, factor);
-
-  for (var i = 0, ii = numbers.length; i < ii;) {
-    for (d = 0; d < stride; ++d, ++i) {
-      lastNumbers[d] += numbers[i];
-      numbers[i] = lastNumbers[d];
-    }
-  }
-
-  return numbers;
-}
-/**
- * Encode a list of floating point numbers and return an encoded string
- *
- * Attention: This function will modify the passed array!
- *
- * @param {Array<number>} numbers A list of floating point numbers.
- * @param {number} [opt_factor] The factor by which the numbers will be
- *     multiplied. The remaining decimal places will get rounded away.
- *     Default is `1e5`.
- * @return {string} The encoded string.
- * @api
- */
-
-
-function encodeFloats(numbers, opt_factor) {
-  var factor = opt_factor ? opt_factor : 1e5;
-
-  for (var i = 0, ii = numbers.length; i < ii; ++i) {
-    numbers[i] = Math.round(numbers[i] * factor);
-  }
-
-  return encodeSignedIntegers(numbers);
-}
-/**
- * Decode a list of floating point numbers from an encoded string
- *
- * @param {string} encoded An encoded string.
- * @param {number} [opt_factor] The factor by which the result will be divided.
- *     Default is `1e5`.
- * @return {Array<number>} A list of floating point numbers.
- * @api
- */
-
-
-function decodeFloats(encoded, opt_factor) {
-  var factor = opt_factor ? opt_factor : 1e5;
-  var numbers = decodeSignedIntegers(encoded);
-
-  for (var i = 0, ii = numbers.length; i < ii; ++i) {
-    numbers[i] /= factor;
-  }
-
-  return numbers;
-}
-/**
- * Encode a list of signed integers and return an encoded string
- *
- * Attention: This function will modify the passed array!
- *
- * @param {Array<number>} numbers A list of signed integers.
- * @return {string} The encoded string.
- */
-
-
-function encodeSignedIntegers(numbers) {
-  for (var i = 0, ii = numbers.length; i < ii; ++i) {
-    var num = numbers[i];
-    numbers[i] = num < 0 ? ~(num << 1) : num << 1;
-  }
-
-  return encodeUnsignedIntegers(numbers);
-}
-/**
- * Decode a list of signed integers from an encoded string
- *
- * @param {string} encoded An encoded string.
- * @return {Array<number>} A list of signed integers.
- */
-
-
-function decodeSignedIntegers(encoded) {
-  var numbers = decodeUnsignedIntegers(encoded);
-
-  for (var i = 0, ii = numbers.length; i < ii; ++i) {
-    var num = numbers[i];
-    numbers[i] = num & 1 ? ~(num >> 1) : num >> 1;
-  }
-
-  return numbers;
-}
-/**
- * Encode a list of unsigned integers and return an encoded string
- *
- * @param {Array<number>} numbers A list of unsigned integers.
- * @return {string} The encoded string.
- */
-
-
-function encodeUnsignedIntegers(numbers) {
-  var encoded = '';
-
-  for (var i = 0, ii = numbers.length; i < ii; ++i) {
-    encoded += encodeUnsignedInteger(numbers[i]);
-  }
-
-  return encoded;
-}
-/**
- * Decode a list of unsigned integers from an encoded string
- *
- * @param {string} encoded An encoded string.
- * @return {Array<number>} A list of unsigned integers.
- */
-
-
-function decodeUnsignedIntegers(encoded) {
-  var numbers = [];
-  var current = 0;
-  var shift = 0;
-
-  for (var i = 0, ii = encoded.length; i < ii; ++i) {
-    var b = encoded.charCodeAt(i) - 63;
-    current |= (b & 0x1f) << shift;
-
-    if (b < 0x20) {
-      numbers.push(current);
-      current = 0;
-      shift = 0;
-    } else {
-      shift += 5;
-    }
-  }
-
-  return numbers;
-}
-/**
- * Encode one single unsigned integer and return an encoded string
- *
- * @param {number} num Unsigned integer that should be encoded.
- * @return {string} The encoded string.
- */
-
-
-function encodeUnsignedInteger(num) {
-  var value,
-      encoded = '';
-
-  while (num >= 0x20) {
-    value = (0x20 | num & 0x1f) + 63;
-    encoded += String.fromCharCode(value);
-    num >>= 5;
-  }
-
-  value = num + 63;
-  encoded += String.fromCharCode(value);
-  return encoded;
-}
-
-var _default = Polyline;
-exports.default = _default;
-},{"../Feature.js":"node_modules/ol/Feature.js","../geom/GeometryLayout.js":"node_modules/ol/geom/GeometryLayout.js","../geom/LineString.js":"node_modules/ol/geom/LineString.js","./TextFeature.js":"node_modules/ol/format/TextFeature.js","../asserts.js":"node_modules/ol/asserts.js","../geom/flat/flip.js":"node_modules/ol/geom/flat/flip.js","../proj.js":"node_modules/ol/proj.js","../geom/SimpleGeometry.js":"node_modules/ol/geom/SimpleGeometry.js","../geom/flat/inflate.js":"node_modules/ol/geom/flat/inflate.js","./Feature.js":"node_modules/ol/format/Feature.js"}],"index.js":[function(require,module,exports) {
+},{"./AssertionError.js":"node_modules/ol/AssertionError.js","./Collection.js":"node_modules/ol/Collection.js","./Disposable.js":"node_modules/ol/Disposable.js","./Feature.js":"node_modules/ol/Feature.js","./Geolocation.js":"node_modules/ol/Geolocation.js","./layer/Graticule.js":"node_modules/ol/layer/Graticule.js","./Image.js":"node_modules/ol/Image.js","./ImageBase.js":"node_modules/ol/ImageBase.js","./ImageCanvas.js":"node_modules/ol/ImageCanvas.js","./ImageTile.js":"node_modules/ol/ImageTile.js","./Kinetic.js":"node_modules/ol/Kinetic.js","./Map.js":"node_modules/ol/Map.js","./MapBrowserEvent.js":"node_modules/ol/MapBrowserEvent.js","./MapBrowserEventHandler.js":"node_modules/ol/MapBrowserEventHandler.js","./MapEvent.js":"node_modules/ol/MapEvent.js","./Object.js":"node_modules/ol/Object.js","./Observable.js":"node_modules/ol/Observable.js","./Overlay.js":"node_modules/ol/Overlay.js","./PluggableMap.js":"node_modules/ol/PluggableMap.js","./Tile.js":"node_modules/ol/Tile.js","./TileCache.js":"node_modules/ol/TileCache.js","./TileQueue.js":"node_modules/ol/TileQueue.js","./TileRange.js":"node_modules/ol/TileRange.js","./VectorRenderTile.js":"node_modules/ol/VectorRenderTile.js","./VectorTile.js":"node_modules/ol/VectorTile.js","./View.js":"node_modules/ol/View.js","./util.js":"node_modules/ol/util.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("ol/ol.css");
@@ -113693,15 +112955,224 @@ var _proj = require("ol/proj");
 
 var _index = require("ol/index");
 
-var _Polyline = _interopRequireDefault(require("ol/format/Polyline"));
-
-var _XYZ = _interopRequireDefault(require("ol/source/XYZ"));
-
-var _render = require("ol/render");
+var _Observable = require("ol/Observable");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// useGeographic();
+// measure
+
+/**
+ * Currently drawn feature.
+ * @type {import("../src/ol/Feature.js").default}
+ */
+var sketch;
+/**
+ * The help tooltip element.
+ * @type {HTMLElement}
+ */
+
+var helpTooltipElement;
+/**
+ * Overlay to show the help messages.
+ * @type {Overlay}
+ */
+
+var helpTooltip;
+/**
+ * The measure tooltip element.
+ * @type {HTMLElement}
+ */
+
+var measureTooltipElement;
+/**
+ * Message to show when the user is drawing a polygon.
+ * @type {string}
+ */
+
+var continuePolygonMsg = 'Click to continue drawing the polygon';
+/**
+ * Message to show when the user is drawing a line.
+ * @type {string}
+ */
+
+var continueLineMsg = 'Click to continue drawing the line';
+/**
+ * Handle pointer move.
+ * @param {import("../src/ol/MapBrowserEvent").default} evt The event.
+ */
+
+var pointerMoveHandler = function pointerMoveHandler(evt) {
+  if (evt.dragging) {
+    return;
+  }
+  /** @type {string} */
+
+
+  var helpMsg = 'Click to start drawing';
+
+  if (sketch) {
+    var geom = sketch.getGeometry();
+
+    if (geom instanceof _geom.Polygon) {
+      helpMsg = continuePolygonMsg;
+    } else if (geom instanceof _geom.LineString) {
+      helpMsg = continueLineMsg;
+    }
+  }
+
+  helpTooltipElement.innerHTML = helpMsg;
+  helpTooltip.setPosition(evt.coordinate);
+  helpTooltipElement.classList.remove('hidden');
+};
+/**
+* Overlay to show the measurement.
+* @type {Overlay}
+*/
+
+
+var measureTooltip;
+/**
+ * Format length output.
+ * @param {LineString} line The line.
+ * @return {string} The formatted length.
+ */
+
+var formatLength = function formatLength(line) {
+  var length = (0, _sphere.getLength)(line);
+  var output;
+
+  if (length > 100) {
+    output = Math.round(length / 1000 * 100) / 100 + ' ' + 'km';
+  } else {
+    output = Math.round(length * 100) / 100 + ' ' + 'm';
+  }
+
+  return output;
+};
+/**
+ * Format area output.
+ * @param {Polygon} polygon The polygon.
+ * @return {string} Formatted area.
+ */
+
+
+var formatArea = function formatArea(polygon) {
+  var area = (0, _sphere.getArea)(polygon);
+  var output;
+
+  if (area > 10000) {
+    output = Math.round(area / 1000000 * 100) / 100 + ' ' + 'km<sup>2</sup>';
+  } else {
+    output = Math.round(area * 100) / 100 + ' ' + 'm<sup>2</sup>';
+  }
+
+  return output;
+};
+
+function addInteraction() {
+  var type = typeSelect.value == 'area' ? 'Polygon' : 'LineString';
+  draw = new _interaction.Draw({
+    source: source,
+    type: type,
+    style: new _style2.Style({
+      fill: new _style2.Fill({
+        color: 'rgba(255, 255, 255, 0.2)'
+      }),
+      stroke: new _style2.Stroke({
+        color: 'rgba(0, 0, 0, 0.5)',
+        lineDash: [10, 10],
+        width: 2
+      }),
+      image: new _style2.Circle({
+        radius: 5,
+        stroke: new _style2.Stroke({
+          color: 'rgba(0, 0, 0, 0.7)'
+        }),
+        fill: new _style2.Fill({
+          color: 'rgba(255, 255, 255, 0.2)'
+        })
+      })
+    })
+  });
+  map.addInteraction(draw);
+  createMeasureTooltip();
+  createHelpTooltip();
+  var listener;
+  draw.on('drawstart', function (evt) {
+    // set sketch
+    sketch = evt.feature;
+    /** @type {import("../src/ol/coordinate.js").Coordinate|undefined} */
+
+    var tooltipCoord = evt.coordinate;
+    listener = sketch.getGeometry().on('change', function (evt) {
+      var geom = evt.target;
+      var output;
+
+      if (geom instanceof _geom.Polygon) {
+        output = formatArea(geom);
+        tooltipCoord = geom.getInteriorPoint().getCoordinates();
+      } else if (geom instanceof _geom.LineString) {
+        output = formatLength(geom);
+        tooltipCoord = geom.getLastCoordinate();
+      }
+
+      measureTooltipElement.innerHTML = output;
+      measureTooltip.setPosition(tooltipCoord);
+    });
+  });
+  draw.on('drawend', function () {
+    measureTooltipElement.className = 'ol-tooltip ol-tooltip-static';
+    measureTooltip.setOffset([0, -7]); // unset sketch
+
+    sketch = null; // unset tooltip so that a new one can be created
+
+    measureTooltipElement = null;
+    createMeasureTooltip();
+    (0, _Observable.unByKey)(listener);
+  });
+}
+/**
+ * Creates a new help tooltip
+ */
+
+
+function createHelpTooltip() {
+  if (helpTooltipElement) {
+    helpTooltipElement.parentNode.removeChild(helpTooltipElement);
+  }
+
+  helpTooltipElement = document.createElement('div');
+  helpTooltipElement.className = 'ol-tooltip hidden';
+  helpTooltip = new _index.Overlay({
+    element: helpTooltipElement,
+    offset: [15, 0],
+    positioning: 'center-left'
+  });
+  map.addOverlay(helpTooltip);
+}
+/**
+ * Creates a new measure tooltip
+ */
+
+
+function createMeasureTooltip() {
+  if (measureTooltipElement) {
+    measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+  }
+
+  measureTooltipElement = document.createElement('div');
+  measureTooltipElement.className = 'ol-tooltip ol-tooltip-measure';
+  measureTooltip = new _index.Overlay({
+    element: measureTooltipElement,
+    offset: [0, -15],
+    positioning: 'bottom-center',
+    stopEvent: false,
+    insertFirst: false
+  });
+  map.addOverlay(measureTooltip);
+} // End measure
+
+
 var place = [-110, 45];
 var point = new _geom.Point(place);
 var raster = new _layer.Tile({
@@ -113804,6 +113275,10 @@ map.on('pointermove', function (event) {
     map.getViewport().style.cursor = 'inherit';
   }
 });
+map.on('pointermove', pointerMoveHandler);
+map.getViewport().addEventListener('mouseout', function () {
+  helpTooltipElement.classList.add('hidden');
+});
 var defaultStyle = new _interaction.Modify({
   source: source
 }).getOverlay().getStyleFunction();
@@ -113865,9 +113340,8 @@ modify.on('modifyend', function (event) {
   });
 });
 map.addInteraction(modify);
-var draw, snap; // global so we can remove them later
-
 var typeSelect = document.getElementById('type');
+var draw, snap; // global so we can remove them later
 
 function addInteractions() {
   var value = typeSelect.value;
@@ -113904,129 +113378,22 @@ function addInteractions() {
     source: source
   });
   map.addInteraction(snap);
-} // Partie Marker Animation
-
-
-fetch('data/polyline/route.json').then(function (response) {
-  response.json().then(function (result) {
-    var polyline = result.routes[0].geometry;
-    var route = new _Polyline.default({
-      factor: 1e6
-    }).readGeometry(polyline, {
-      dataProjection: 'EPSG:4326',
-      featureProjection: 'EPSG:3857'
-    });
-    var routeFeature = new _index.Feature({
-      type: 'route',
-      geometry: route
-    });
-    var startMarker = new _index.Feature({
-      type: 'icon',
-      geometry: new _geom.Point(route.getFirstCoordinate())
-    });
-    var endMarker = new _index.Feature({
-      type: 'icon',
-      geometry: new _geom.Point(route.getLastCoordinate())
-    });
-    var position = startMarker.getGeometry().clone();
-    var geoMarker = new _index.Feature({
-      type: 'geoMarker',
-      geometry: position
-    });
-    var styles = {
-      'route': new _style2.Style({
-        stroke: new _style2.Stroke({
-          width: 6,
-          color: [237, 212, 0, 0.8]
-        })
-      }),
-      'icon': new _style2.Style({
-        image: new _style2.Icon({
-          anchor: [0.5, 1],
-          src: 'data/icon.png'
-        })
-      }),
-      'geoMarker': new _style2.Style({
-        image: new _style2.Circle({
-          radius: 7,
-          fill: new _style2.Fill({
-            color: 'black'
-          }),
-          stroke: new _style2.Stroke({
-            color: 'white',
-            width: 2
-          })
-        })
-      })
-    };
-    var vectorLayer = new _layer.Vector({
-      source: new _source.Vector({
-        features: [routeFeature, geoMarker, startMarker, endMarker]
-      }),
-      style: function style(feature) {
-        return styles[feature.get('type')];
-      }
-    });
-    map.addLayer(vectorLayer);
-    var speedInput = document.getElementById('speed');
-    var startButton = document.getElementById('start-animation');
-    var animating = false;
-    var distance = 0;
-    var lastTime;
-
-    function moveFeature(event) {
-      var speed = Number(speedInput.value);
-      var time = event.frameState.time;
-      var elapsedTime = time - lastTime;
-      distance = (distance + speed * elapsedTime / 1e6) % 2;
-      lastTime = time;
-      var currentCoordinate = route.getCoordinateAt(distance > 1 ? 2 - distance : distance);
-      position.setCoordinates(currentCoordinate);
-      var vectorContext = (0, _render.getVectorContext)(event);
-      vectorContext.setStyle(styles.geoMarker);
-      vectorContext.drawGeometry(position); // tell OpenLayers to continue the postrender animation
-
-      map.render();
-    }
-
-    function startAnimation() {
-      animating = true;
-      lastTime = Date.now();
-      startButton.textContent = 'Stop Animation';
-      vectorLayer.on('postrender', moveFeature); // hide geoMarker and trigger map render through change event
-
-      geoMarker.setGeometry(null);
-    }
-
-    function stopAnimation() {
-      animating = false;
-      startButton.textContent = 'Start Animation'; // Keep marker at current animation position
-
-      geoMarker.setGeometry(position);
-      vectorLayer.un('postrender', moveFeature);
-    }
-
-    startButton.addEventListener('click', function () {
-      if (animating) {
-        stopAnimation();
-      } else {
-        startAnimation();
-      }
-    });
-  });
-});
+}
 /**
  * Handle change event.
  */
 
+
 typeSelect.onchange = function () {
   map.removeInteraction(draw);
   map.removeInteraction(snap);
+  addInteraction();
   addInteractions();
 };
 
+addInteraction();
 addInteractions();
-},{"ol/ol.css":"node_modules/ol/ol.css","ol/Map":"node_modules/ol/Map.js","ol/View":"node_modules/ol/View.js","ol/style":"node_modules/ol/style.js","ol/interaction":"node_modules/ol/interaction.js","ol/geom":"node_modules/ol/geom.js","ol/source":"node_modules/ol/source.js","ol/layer":"node_modules/ol/layer.js","ol/geom/Polygon":"node_modules/ol/geom/Polygon.js","ol/sphere":"node_modules/ol/sphere.js","ol/proj":"node_modules/ol/proj.js","ol/index":"node_modules/ol/index.js","ol/format/Polyline":"node_modules/ol/format/Polyline.js","ol/source/XYZ":"node_modules/ol/source/XYZ.js","ol/render":"node_modules/ol/render.js"}],"node_modules/geotiff/src/predictor.js":[function(require,module,exports) {
+},{"ol/ol.css":"node_modules/ol/ol.css","ol/Map":"node_modules/ol/Map.js","ol/View":"node_modules/ol/View.js","ol/style":"node_modules/ol/style.js","ol/interaction":"node_modules/ol/interaction.js","ol/geom":"node_modules/ol/geom.js","ol/source":"node_modules/ol/source.js","ol/layer":"node_modules/ol/layer.js","ol/geom/Polygon":"node_modules/ol/geom/Polygon.js","ol/sphere":"node_modules/ol/sphere.js","ol/proj":"node_modules/ol/proj.js","ol/index":"node_modules/ol/index.js","ol/Observable":"node_modules/ol/Observable.js"}],"node_modules/geotiff/src/predictor.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -122212,7 +121579,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43663" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36115" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

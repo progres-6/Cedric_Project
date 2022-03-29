@@ -3,17 +3,222 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import {Circle as CircleStyle, Fill,Icon , Stroke, Style} from 'ol/style';
 import {Draw, Modify, Snap} from 'ol/interaction';
-import {Circle, GeometryCollection, Point, Polygon} from 'ol/geom';
+import {Circle, GeometryCollection, Point, Polygon, LineString} from 'ol/geom';
 import {OSM, Vector as VectorSource} from 'ol/source';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {circular} from 'ol/geom/Polygon';
 import {getDistance} from 'ol/sphere';
-import {transform, useGeographic} from 'ol/proj';
+import {transform} from 'ol/proj';
 import {Feature, Overlay} from 'ol/index';
-import Polyline from 'ol/format/Polyline';
-import XYZ from 'ol/source/XYZ';
-import {getVectorContext} from 'ol/render';
-// useGeographic();
+import {getArea, getLength} from 'ol/sphere';
+import {unByKey} from 'ol/Observable';
+
+// measure
+
+/**
+ * Currently drawn feature.
+ * @type {import("../src/ol/Feature.js").default}
+ */
+ let sketch;
+
+ /**
+  * The help tooltip element.
+  * @type {HTMLElement}
+  */
+ let helpTooltipElement;
+ 
+ /**
+  * Overlay to show the help messages.
+  * @type {Overlay}
+  */
+ let helpTooltip;
+ 
+ /**
+  * The measure tooltip element.
+  * @type {HTMLElement}
+  */
+ let measureTooltipElement;
+ 
+/**
+ * Message to show when the user is drawing a polygon.
+ * @type {string}
+ */
+ const continuePolygonMsg = 'Click to continue drawing the polygon';
+
+ /**
+  * Message to show when the user is drawing a line.
+  * @type {string}
+  */
+ const continueLineMsg = 'Click to continue drawing the line';
+
+
+/**
+ * Handle pointer move.
+ * @param {import("../src/ol/MapBrowserEvent").default} evt The event.
+ */
+const pointerMoveHandler = function (evt) {
+  if (evt.dragging) {
+    return;
+  }
+  /** @type {string} */
+  let helpMsg = 'Click to start drawing';
+
+  if (sketch) {
+    const geom = sketch.getGeometry();
+    if (geom instanceof Polygon) {
+      helpMsg = continuePolygonMsg;
+    } else if (geom instanceof LineString) {
+      helpMsg = continueLineMsg;
+    }
+  }
+
+  helpTooltipElement.innerHTML = helpMsg;
+  helpTooltip.setPosition(evt.coordinate);
+
+  helpTooltipElement.classList.remove('hidden');
+};
+
+/**
+* Overlay to show the measurement.
+* @type {Overlay}
+*/
+let measureTooltip;
+ 
+/**
+ * Format length output.
+ * @param {LineString} line The line.
+ * @return {string} The formatted length.
+ */
+ const formatLength = function (line) {
+  const length = getLength(line);
+  let output;
+  if (length > 100) {
+    output = Math.round((length / 1000) * 100) / 100 + ' ' + 'km';
+  } else {
+    output = Math.round(length * 100) / 100 + ' ' + 'm';
+  }
+  return output;
+};
+
+/**
+ * Format area output.
+ * @param {Polygon} polygon The polygon.
+ * @return {string} Formatted area.
+ */
+ const formatArea = function (polygon) {
+  const area = getArea(polygon);
+  let output;
+  if (area > 10000) {
+    output = Math.round((area / 1000000) * 100) / 100 + ' ' + 'km<sup>2</sup>';
+  } else {
+    output = Math.round(area * 100) / 100 + ' ' + 'm<sup>2</sup>';
+  }
+  return output;
+};
+
+function addInteraction() {
+  const type = typeSelect.value == 'area' ? 'Polygon' : 'LineString';
+  draw = new Draw({
+    source: source,
+    type: type,
+    style: new Style({
+      fill: new Fill({
+        color: 'rgba(255, 255, 255, 0.2)',
+      }),
+      stroke: new Stroke({
+        color: 'rgba(0, 0, 0, 0.5)',
+        lineDash: [10, 10],
+        width: 2,
+      }),
+      image: new CircleStyle({
+        radius: 5,
+        stroke: new Stroke({
+          color: 'rgba(0, 0, 0, 0.7)',
+        }),
+        fill: new Fill({
+          color: 'rgba(255, 255, 255, 0.2)',
+        }),
+      }),
+    }),
+  });
+  map.addInteraction(draw);
+
+  createMeasureTooltip();
+  createHelpTooltip();
+
+  let listener;
+  draw.on('drawstart', function (evt) {
+    // set sketch
+    sketch = evt.feature;
+
+    /** @type {import("../src/ol/coordinate.js").Coordinate|undefined} */
+    let tooltipCoord = evt.coordinate;
+
+    listener = sketch.getGeometry().on('change', function (evt) {
+      const geom = evt.target;
+      let output;
+      if (geom instanceof Polygon) {
+        output = formatArea(geom);
+        tooltipCoord = geom.getInteriorPoint().getCoordinates();
+      } else if (geom instanceof LineString) {
+        output = formatLength(geom);
+        tooltipCoord = geom.getLastCoordinate();
+      }
+      measureTooltipElement.innerHTML = output;
+      measureTooltip.setPosition(tooltipCoord);
+    });
+  });
+
+  draw.on('drawend', function () {
+    measureTooltipElement.className = 'ol-tooltip ol-tooltip-static';
+    measureTooltip.setOffset([0, -7]);
+    // unset sketch
+    sketch = null;
+    // unset tooltip so that a new one can be created
+    measureTooltipElement = null;
+    createMeasureTooltip();
+    unByKey(listener);
+  });
+}
+
+/**
+ * Creates a new help tooltip
+ */
+ function createHelpTooltip() {
+  if (helpTooltipElement) {
+    helpTooltipElement.parentNode.removeChild(helpTooltipElement);
+  }
+  helpTooltipElement = document.createElement('div');
+  helpTooltipElement.className = 'ol-tooltip hidden';
+  helpTooltip = new Overlay({
+    element: helpTooltipElement,
+    offset: [15, 0],
+    positioning: 'center-left',
+  });
+  map.addOverlay(helpTooltip);
+}
+
+/**
+ * Creates a new measure tooltip
+ */
+ function createMeasureTooltip() {
+  if (measureTooltipElement) {
+    measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+  }
+  measureTooltipElement = document.createElement('div');
+  measureTooltipElement.className = 'ol-tooltip ol-tooltip-measure';
+  measureTooltip = new Overlay({
+    element: measureTooltipElement,
+    offset: [0, -15],
+    positioning: 'bottom-center',
+    stopEvent: false,
+    insertFirst: false,
+  });
+  map.addOverlay(measureTooltip);
+}
+
+
+// End measure
 
 
 const place = [-110, 45];
@@ -136,9 +341,14 @@ map.on('click', function (event) {
 map.on('pointermove', function (event) {
   if (map.hasFeatureAtPixel(event.pixel)) {
     map.getViewport().style.cursor = 'pointer';
-  } else {
+  } else{
     map.getViewport().style.cursor = 'inherit';
   }
+});
+map.on('pointermove', pointerMoveHandler);
+
+map.getViewport().addEventListener('mouseout', function () {
+  helpTooltipElement.classList.add('hidden');
 });
 
 const defaultStyle = new Modify({source: source})
@@ -210,8 +420,11 @@ modify.on('modifyend', function (event) {
 
 map.addInteraction(modify);
 
-let draw, snap; // global so we can remove them later
 const typeSelect = document.getElementById('type');
+
+let draw, snap; // global so we can remove them later
+
+
 
 function addInteractions() {
   let value = typeSelect.value;
@@ -246,135 +459,16 @@ function addInteractions() {
   snap = new Snap({source: source});
   map.addInteraction(snap);
 }
-
-// Partie Marker Animation
-fetch('data/polyline/route.json').then(function (response) {
-  response.json().then(function (result) {
-    const polyline = result.routes[0].geometry;
-
-    const route = new Polyline({
-      factor: 1e6,
-    }).readGeometry(polyline, {
-      dataProjection: 'EPSG:4326',
-      featureProjection: 'EPSG:3857',
-    });
-
-    const routeFeature = new Feature({
-      type: 'route',
-      geometry: route,
-    });
-
-    const startMarker = new Feature({
-      type: 'icon',
-      geometry: new Point(route.getFirstCoordinate()),
-    });
-
-    const endMarker = new Feature({
-      type: 'icon',
-      geometry: new Point(route.getLastCoordinate()),
-    });
-
-    const position = startMarker.getGeometry().clone();
-    const geoMarker = new Feature({
-      type: 'geoMarker',
-      geometry: position,
-    });
-
-    const styles = {
-      'route': new Style({
-        stroke: new Stroke({
-          width: 6,
-          color: [237, 212, 0, 0.8],
-        }),
-      }),
-      'icon': new Style({
-        image: new Icon({
-          anchor: [0.5, 1],
-          src: 'data/icon.png',
-        }),
-      }),
-      'geoMarker': new Style({
-        image: new CircleStyle({
-          radius: 7,
-          fill: new Fill({color: 'black'}),
-          stroke: new Stroke({
-            color: 'white',
-            width: 2,
-          }),
-        }),
-      }),
-    };
-
-    const vectorLayer = new VectorLayer({
-      source: new VectorSource({
-        features: [routeFeature, geoMarker, startMarker, endMarker],
-      }),
-      style: function (feature) {
-        return styles[feature.get('type')];
-      },
-    });
-
-    map.addLayer(vectorLayer);
-
-    const speedInput = document.getElementById('speed');
-    const startButton = document.getElementById('start-animation');
-    let animating = false;
-    let distance = 0;
-    let lastTime;
-
-    function moveFeature(event) {
-      const speed = Number(speedInput.value);
-      const time = event.frameState.time;
-      const elapsedTime = time - lastTime;
-      distance = (distance + (speed * elapsedTime) / 1e6) % 2;
-      lastTime = time;
-
-      const currentCoordinate = route.getCoordinateAt(
-        distance > 1 ? 2 - distance : distance
-      );
-      position.setCoordinates(currentCoordinate);
-      const vectorContext = getVectorContext(event);
-      vectorContext.setStyle(styles.geoMarker);
-      vectorContext.drawGeometry(position);
-      // tell OpenLayers to continue the postrender animation
-      map.render();
-    }
-
-    function startAnimation() {
-      animating = true;
-      lastTime = Date.now();
-      startButton.textContent = 'Stop Animation';
-      vectorLayer.on('postrender', moveFeature);
-      // hide geoMarker and trigger map render through change event
-      geoMarker.setGeometry(null);
-    }
-
-    function stopAnimation() {
-      animating = false;
-      startButton.textContent = 'Start Animation';
-
-      // Keep marker at current animation position
-      geoMarker.setGeometry(position);
-      vectorLayer.un('postrender', moveFeature);
-    }
-
-    startButton.addEventListener('click', function () {
-      if (animating) {
-        stopAnimation();
-      } else {
-        startAnimation();
-      }
-    });
-  
-  });
-});
 /**
  * Handle change event.
  */
 typeSelect.onchange = function () {
   map.removeInteraction(draw);
   map.removeInteraction(snap);
+  addInteraction();
   addInteractions();
 };
 
+
+addInteraction();
 addInteractions();
